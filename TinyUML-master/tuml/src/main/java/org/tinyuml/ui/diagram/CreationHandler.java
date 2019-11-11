@@ -22,6 +22,8 @@ package org.tinyuml.ui.diagram;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.LinkedList;
+
 import org.tinyuml.draw.CompositeNode;
 import org.tinyuml.draw.DiagramElement;
 import org.tinyuml.draw.DrawingContext;
@@ -86,11 +88,12 @@ public class CreationHandler implements EditorMode {
     CompositeNode parent = editor.getDiagram();
     DiagramElement possibleParent = editor.getDiagram().getChildAt(
       tmpPos.getX(), tmpPos.getY());
+    LinkedList<Node> classParent = editor.getClassParent();
     if (isNestingCondition(possibleParent)) {
       parent = (CompositeNode) possibleParent;
     }
     AddNodeCommand createCommand = new AddNodeCommand(editor,
-      parent, element, tmpPos.getX(), tmpPos.getY());
+      parent, element, tmpPos.getX(), tmpPos.getY(), classParent);
     editor.execute(createCommand);
   }
 
@@ -190,4 +193,8 @@ public class CreationHandler implements EditorMode {
    * {@inheritDoc}
    */
   public void cancel() { }
+
+  public void copy(DrawingContext self){
+    draw(self);
+  }
 }
