@@ -18,10 +18,11 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package org.tinyuml.ui.diagram.commands;
-
+import java.util.LinkedList;
 import javax.swing.undo.AbstractUndoableEdit;
 import org.tinyuml.draw.CompositeElement;
 import org.tinyuml.draw.Node;
+import org.tinyuml.umldraw.structure.ClassElement;
 import org.tinyuml.util.Command;
 
 /**
@@ -37,18 +38,20 @@ public class AddNodeCommand extends AbstractUndoableEdit implements Command {
   private Node node;
   private CompositeElement parent;
   private double absx, absy;
+  private LinkedList<Node> classParent;
 
   /**
-   * Constructor.
    * @param editorNotification a DiagramEditorNotification object
    * @param parent the parent component
    * @param aNode the created node
    * @param x the absolute x position
    * @param y the absolute y position
+   * @param classParent the list where the classes will be saved
    */
   public AddNodeCommand(DiagramEditorNotification editorNotification,
-    CompositeElement parent, Node aNode, double x, double y) {
+    CompositeElement parent, Node aNode, double x, double y, LinkedList<Node> classParent) {
     this.parent = parent;
+    this.classParent = classParent;
     node = aNode;
     absx = x;
     absy = y;
@@ -63,6 +66,9 @@ public class AddNodeCommand extends AbstractUndoableEdit implements Command {
     super.undo();
     parent.removeChild(node);
     notification.notifyElementRemoved(node);
+    //removemos si se decide eliminar or undo
+    if (node.getClass() == ClassElement.class)
+      classParent.remove(node);
   }
 
   /**
@@ -81,5 +87,13 @@ public class AddNodeCommand extends AbstractUndoableEdit implements Command {
     parent.addChild(node);
     node.setAbsolutePos(absx, absy);
     notification.notifyElementAdded(node);
+    
+    //Agregamos todas las clases a un padre
+    System.out.println(node.getClass());
+    if (node.getClass() == ClassElement.class)
+      classParent.add(node);
   }
+  /**
+   * {@inheritDoc}
+   */
 }
