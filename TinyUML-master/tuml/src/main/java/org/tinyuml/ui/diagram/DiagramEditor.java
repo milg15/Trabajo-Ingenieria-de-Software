@@ -36,9 +36,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -46,7 +45,6 @@ import javax.swing.KeyStroke;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoManager;
-
 import org.tinyuml.draw.Connection;
 import org.tinyuml.model.RelationType;
 import org.tinyuml.draw.DiagramOperations;
@@ -69,7 +67,6 @@ import org.tinyuml.model.UmlClass;
 import org.tinyuml.ui.diagram.commands.ConvertConnectionTypeCommand;
 import org.tinyuml.util.AppCommandListener;
 import org.tinyuml.ui.diagram.commands.DeleteElementCommand;
-import org.tinyuml.ui.diagram.commands.PasteElementCommand;
 import org.tinyuml.ui.diagram.commands.MoveElementCommand;
 import org.tinyuml.ui.diagram.commands.ResizeElementCommand;
 import org.tinyuml.ui.diagram.commands.SetLabelTextCommand;
@@ -80,6 +77,7 @@ import org.tinyuml.ui.diagram.commands.SetConnectionNavigabilityCommand;
 import org.tinyuml.umldraw.shared.UmlConnection;
 import org.tinyuml.umldraw.structure.Association;
 import org.tinyuml.umldraw.structure.ClassElement;
+import org.tinyuml.umldraw.structure.ComponentElement;
 import org.tinyuml.util.Command;
 
 /**
@@ -108,6 +106,9 @@ DiagramEditorNotification, DiagramOperations, NodeChangeListener {
   private transient List<UndoableEditListener> editListeners =
     new ArrayList<UndoableEditListener>();
   private transient Scaling scaling = Scaling.SCALING_100;
+  //No ordenado pero funciona
+  private LinkedList<Node> classParent;
+  //private Compartment mainCompartment;
 
   /**
    * Reset the transient values for serialization.
@@ -132,6 +133,7 @@ DiagramEditorNotification, DiagramOperations, NodeChangeListener {
     editorMode = selectionHandler;
     mouseEvent = new EditorMouseEvent();
     scaling = Scaling.SCALING_100;
+    classParent = new LinkedList<Node> ();
   }
 
   /**
@@ -254,46 +256,6 @@ DiagramEditorNotification, DiagramOperations, NodeChangeListener {
   public void deleteSelection() {
     Collection<DiagramElement> elements = getSelectedElements();
     execute(new DeleteElementCommand(this, elements));
-  }
-  
-  /**
-   * Pastes into this diagram the handed Elements
-   */
-  public void pasteElement(Collection<DiagramElement> elements){
-	// este hash asocia cada elemento de "elements" con su clon
-	HashMap<DiagramElement, DiagramElement> clonedElements =
-			new HashMap<DiagramElement, DiagramElement>();
-	
-	for(DiagramElement elem : elements){
-		DiagramElement copia = (DiagramElement)elem.clone();
-		
-		// le cambiamos el parent al objeto clonado para poder ponerlo
-		// en este diagrama, pues puede venir de otro diagrama!
-		copia.setParent(getDiagram());
-		
-		clonedElements.put(elem, copia);
-	}
-	
-	// hasta aquí tengo el hash de cada objeto con su clon (del nuevo diagrama)
-	// ahora debo iterar por cada Connection en elements y rehacer sus conexiones
-	// tomaré el ejemplo desde PasteElementCommand.
-	for(DiagramElement elem : elements){
-		if(elem instanceof Connection){
-			Connection currentConnection = (Connection)elem;
-			Connection newConnection = (Connection)clonedElements.get(currentConnection);
-			
-			Node originalNode1 = currentConnection.getNode1();
-			Node originalNode2 = currentConnection.getNode2();
-			
-			newConnection.setNode1((Node)clonedElements.get(originalNode1));
-			newConnection.setNode2((Node)clonedElements.get(originalNode2));
-			
-			newConnection.getNode1().addConnection(newConnection);
-			newConnection.getNode2().addConnection(newConnection);
-		}
-	}
-	
-	execute(new PasteElementCommand(this, clonedElements.values()));
   }
 
   // *************************************************************************
@@ -534,6 +496,7 @@ DiagramEditorNotification, DiagramOperations, NodeChangeListener {
    */
   public StructureDiagram getDiagram() { return diagram; }
 
+  public LinkedList<Node> getClassParent() { return classParent; } 
   /**
    * Returns the canUndo status.
    * @return true if can undo, false otherwise
@@ -908,4 +871,17 @@ DiagramEditorNotification, DiagramOperations, NodeChangeListener {
    * {@inheritDoc}
    */
   public void nodeMoved(Node node) { }
+
+  /*
+   * {@MariaC Added} 
+  */
+  public void copy() {
+    Collection<DiagramElement> elements = getSelectedElements();
+    for (DiagramElement d : elements){
+      ComponentElement cEl;
+      Object newelement = d.clone();
+    }
+  }
+  public void paste () {}
+
 }
