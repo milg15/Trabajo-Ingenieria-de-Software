@@ -39,14 +39,14 @@ public class AddNodeCommand extends AbstractUndoableEdit implements Command {
   private CompositeElement parent;
   private double absx, absy;
   private LinkedList<Node> classParent;
-
+  
   /**
    * @param editorNotification a DiagramEditorNotification object
    * @param parent the parent component
    * @param aNode the created node
    * @param x the absolute x position
    * @param y the absolute y position
-   * @param classParent the list where the classes will be saved
+   * @param classParent the linkedlist where the classes will be saved
    */
   public AddNodeCommand(DiagramEditorNotification editorNotification,
     CompositeElement parent, Node aNode, double x, double y, LinkedList<Node> classParent) {
