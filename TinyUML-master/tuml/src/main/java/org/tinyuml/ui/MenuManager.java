@@ -71,6 +71,9 @@ public class MenuManager implements ActionListener {
     createMenuItem(fileMenu, "open");
     createMenuItem(fileMenu, "saveas");
     createMenuItem(fileMenu, "save");
+    //Add new menu item 
+    createMenuItem(fileMenu, "createJava");
+
     createMenuItem(fileMenu, "exportgfx");
     fileMenu.addSeparator();
     createMenuItem(fileMenu, "quit");
@@ -85,15 +88,15 @@ public class MenuManager implements ActionListener {
     createMenuItem(editMenu, "undo");
     createMenuItem(editMenu, "redo");
     editMenu.addSeparator();
-    
+
     createMenuItem(editMenu, "cut");
     createMenuItem(editMenu, "copy");
     createMenuItem(editMenu, "paste");
-    
+
     createMenuItem(editMenu, "delete");
 
-    editMenu.addSeparator();
-    createMenuItem(editMenu, "settings");
+    //editMenu.addSeparator();
+    //createMenuItem(editMenu, "settings");
 
     enableMenuItem("UNDO", false);
     enableMenuItem("REDO", false);
@@ -161,7 +164,8 @@ public class MenuManager implements ActionListener {
    */
   private JMenuItem createMenuItem(JMenu menu, String name) {
     String prefix = "menuitem." + name;
-    JMenuItem menuitem = new JMenuItem(getResourceString(prefix + ".name"));
+    String namex = prefix + ".name";
+    JMenuItem menuitem = new JMenuItem(getResourceString(namex));
     addMenuItemInformation(menuitem, prefix);
     menu.add(menuitem);
     return menuitem;
@@ -203,7 +207,8 @@ public class MenuManager implements ActionListener {
    * @param prefix the resource prefix
    */
   private void addMenuItemInformation(JMenuItem menuitem, String prefix) {
-    int mnemonic = getResourceChar(prefix + ".mnemonic");
+    String word =  prefix + ".mnemonic";
+    int mnemonic = getResourceChar(word);
     if (mnemonic > 0) {
       menuitem.setMnemonic(mnemonic);
     }
