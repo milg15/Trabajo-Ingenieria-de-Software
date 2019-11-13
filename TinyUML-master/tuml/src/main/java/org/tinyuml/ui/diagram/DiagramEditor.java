@@ -107,7 +107,7 @@ DiagramEditorNotification, DiagramOperations, NodeChangeListener {
     new ArrayList<UndoableEditListener>();
   private transient Scaling scaling = Scaling.SCALING_100;
   //No ordenado pero funciona
-  private LinkedList<Node> classParent;
+  private LinkedList<ClassElement> classParent;
   //private Compartment mainCompartment;
 
   /**
@@ -133,7 +133,7 @@ DiagramEditorNotification, DiagramOperations, NodeChangeListener {
     editorMode = selectionHandler;
     mouseEvent = new EditorMouseEvent();
     scaling = Scaling.SCALING_100;
-    classParent = new LinkedList<Node> ();
+    classParent = new LinkedList<ClassElement> ();
   }
 
   /**
@@ -496,7 +496,7 @@ DiagramEditorNotification, DiagramOperations, NodeChangeListener {
    */
   public StructureDiagram getDiagram() { return diagram; }
 
-  public LinkedList<Node> getClassParent() { return classParent; } 
+  public LinkedList<ClassElement> getClassParent() { return classParent; } 
   /**
    * Returns the canUndo status.
    * @return true if can undo, false otherwise
