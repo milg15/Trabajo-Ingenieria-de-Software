@@ -18,6 +18,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 package org.tinyuml.ui.diagram.commands;
+
+
+//liked list -M added
 import java.util.LinkedList;
 import javax.swing.undo.AbstractUndoableEdit;
 import org.tinyuml.draw.CompositeElement;
@@ -27,8 +30,7 @@ import org.tinyuml.util.Command;
 
 /**
  * This class implements a command to add nodes. It is introduced, because
- * AddElementCommand can not handle setting positions with nesting very
- * well.
+ * AddElementCommand can not handle setting positions with nesting very well.
  *
  * @author Wei-ju Wu
  * @version 1.0
@@ -38,18 +40,19 @@ public class AddNodeCommand extends AbstractUndoableEdit implements Command {
   private Node node;
   private CompositeElement parent;
   private double absx, absy;
-  private LinkedList<Node> classParent;
-  
+  // I added this class to save the classes - M
+  private LinkedList<ClassElement> classParent;
+
   /**
    * @param editorNotification a DiagramEditorNotification object
-   * @param parent the parent component
-   * @param aNode the created node
-   * @param x the absolute x position
-   * @param y the absolute y position
-   * @param classParent the linkedlist where the classes will be saved
+   * @param parent             the parent component
+   * @param aNode              the created node
+   * @param x                  the absolute x position
+   * @param y                  the absolute y position
+   * @param classParent        the list where the classes will be saved
    */
-  public AddNodeCommand(DiagramEditorNotification editorNotification,
-    CompositeElement parent, Node aNode, double x, double y, LinkedList<Node> classParent) {
+  public AddNodeCommand(DiagramEditorNotification editorNotification, CompositeElement parent, Node aNode, double x,
+      double y, LinkedList<ClassElement> classParent) {
     this.parent = parent;
     this.classParent = classParent;
     node = aNode;
@@ -66,7 +69,6 @@ public class AddNodeCommand extends AbstractUndoableEdit implements Command {
     super.undo();
     parent.removeChild(node);
     notification.notifyElementRemoved(node);
-    //removemos si se decide eliminar or undo
     if (node.getClass() == ClassElement.class)
       classParent.remove(node);
   }
@@ -87,11 +89,9 @@ public class AddNodeCommand extends AbstractUndoableEdit implements Command {
     parent.addChild(node);
     node.setAbsolutePos(absx, absy);
     notification.notifyElementAdded(node);
-    
-    //Agregamos todas las clases a un padre
-    System.out.println(node.getClass());
+    // Agregamos todas las clases a un padre
     if (node.getClass() == ClassElement.class)
-      classParent.add(node);
+      classParent.add( (ClassElement) node);          
   }
   /**
    * {@inheritDoc}
