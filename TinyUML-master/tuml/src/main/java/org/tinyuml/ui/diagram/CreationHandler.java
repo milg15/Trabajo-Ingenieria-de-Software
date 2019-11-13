@@ -30,6 +30,7 @@ import org.tinyuml.draw.DrawingContext;
 import org.tinyuml.draw.Node;
 import org.tinyuml.model.ElementType;
 import org.tinyuml.ui.diagram.commands.AddNodeCommand;
+import org.tinyuml.umldraw.structure.ClassElement;
 
 /**
  * This class implements the editor creation mode. Creation is triggered on the
@@ -88,7 +89,7 @@ public class CreationHandler implements EditorMode {
     CompositeNode parent = editor.getDiagram();
     DiagramElement possibleParent = editor.getDiagram().getChildAt(
       tmpPos.getX(), tmpPos.getY());
-    LinkedList<Node> classParent = editor.getClassParent();
+    LinkedList<ClassElement> classParent = editor.getClassParent();
     if (isNestingCondition(possibleParent)) {
       parent = (CompositeNode) possibleParent;
     }
