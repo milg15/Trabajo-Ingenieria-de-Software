@@ -311,16 +311,16 @@ implements LabelSource, UmlNode, UmlModelElementListener {
    */
   public boolean acceptsConnection(RelationType associationType,
     RelationEndType as, UmlNode with) {
-	// Solicitud A: Cuando se hace la verificaciÛn de si SOURCE es v·lido
-	// se entrega null. Arreglaremos esta cosa aceptando la conexiÛn si
+	// Solicitud A: Cuando se hace la verificaci√≥n de si SOURCE es v√°lido
+	// se entrega null. Arreglaremos esta cosa aceptando la conexi√≥n si
 	// la RelationEndType (as) es SOURCE
 	if(as == RelationEndType.SOURCE) return true;
 	  
-	// Solicitud A: Clases se pueden relacionar entre sÌ
+	// Solicitud A: Clases se pueden relacionar entre s√≠
 	if(with instanceof ClassElement) return true;
 	
-	// Solicitud A: La herencia sÛlo se puede dar entre clases
-	// esta verificaciÛn es un poco redundante con la anterior.. no?
+	// Solicitud A: La herencia s√≥lo se puede dar entre clases
+	// esta verificaci√≥n es un poco redundante con la anterior.. no?
 	if(associationType == RelationType.INHERITANCE && with instanceof ClassElement)
 	  return true;
 	
@@ -554,4 +554,11 @@ implements LabelSource, UmlNode, UmlModelElementListener {
    */
   @Override
   public boolean isNestable() { return true; }
+  
+  public List<UmlProperty> getAttributes(){
+    return classData.getAttributes();
+  }
+  public List<UmlProperty> getMethods(){
+    return classData.getMethods();
+  }
 }
